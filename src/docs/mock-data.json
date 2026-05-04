@@ -1,0 +1,141 @@
+
+{
+  "users": {
+    "user_test_id": {
+      "document": {
+        "name": "Usuário de Teste",
+        "email": "test@example.com",
+        "password": "password",
+        "createdAt": "2024-01-01T12:00:00Z",
+        "subscriptionStartDate": "2024-07-10T12:00:00Z",
+        "status": "active",
+        "subscriptionStatus": "Anual",
+        "lastPaymentStatus": "Pago",
+        "storageUsed": 2500000,
+        "storageLimit": 100,
+        "checkInFrequency": 90,
+        "requireDoubleConfirmation": true,
+        "lastCheckIn": "2024-04-01T12:00:00Z",
+        "secondaryEmail": "recovery@example.com",
+        "role": "user"
+      },
+      "collections": {
+        "memories": {
+          "mem_1": {
+            "document": {
+              "title": "Vídeo de Casamento",
+              "description": "O vídeo completo do dia mais feliz de nossas vidas.",
+              "type": "video",
+              "fileUrl": "https://storage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
+              "fileSize": 157286400,
+              "createdAt": "2022-05-20T10:00:00Z",
+              "recipients": ["rec_1", "rec_2"],
+              "tags": ["familia", "casamento"],
+              "isDelivered": false
+            }
+          },
+          "mem_2": {
+            "document": {
+              "title": "Carta para os Filhos",
+              "description": "Algumas palavras que eu quero que vocês sempre se lembrem.",
+              "type": "texto",
+              "content": "Meus queridos filhos, nunca se esqueçam do quanto são amados. Vivam suas vidas com coragem, alegria e, acima de tudo, com bondade no coração. Estarei sempre com vocês, de uma forma ou de outra. Com amor, mamãe.",
+              "createdAt": "2023-10-15T18:30:00Z",
+              "recipients": ["rec_2"],
+              "tags": ["familia", "conselhos"],
+              "isDelivered": false
+            }
+          },
+          "mem_3": {
+            "document": {
+              "title": "Álbum de Férias na Praia",
+              "description": "Nossas férias inesquecíveis de 2023.",
+              "type": "image",
+              "fileUrl": "https://picsum.photos/seed/beach-vacation/1200/800",
+              "image": {
+                "src": "https://picsum.photos/seed/beach-vacation/1200/800",
+                "hint": "beach vacation"
+              },
+              "fileSize": 4194304,
+              "createdAt": "2023-08-01T14:00:00Z",
+              "recipients": ["rec_1", "rec_2"],
+              "tags": ["viagem", "familia"],
+              "isDelivered": false
+            }
+          }
+        },
+        "recipients": {
+          "rec_1": {
+            "document": {
+              "name": "Carlos Pereira",
+              "email": "carlos.p@example.com",
+              "relationship": "Cônjuge",
+              "createdAt": "2022-01-15T09:00:00Z"
+            }
+          },
+          "rec_2": {
+            "document": {
+              "name": "Sofia Pereira",
+              "email": "sofia.p@example.com",
+              "relationship": "Filha",
+              "createdAt": "2022-01-15T09:05:00Z"
+            }
+          },
+          "rec_3": {
+            "document": {
+              "name": "Mariana Costa",
+              "email": "mariana.c@example.com",
+              "relationship": "Melhor Amiga",
+              "createdAt": "2022-02-10T11:30:00Z"
+            }
+          }
+        },
+        "checkIns": {
+          "checkin_1": {
+            "document": {
+              "timestamp": "2024-05-01T12:00:00Z",
+              "method": "manual",
+              "userId": "user_test_id"
+            }
+          }
+        }
+      }
+    },
+    "user_delinquent_id": {
+      "document": {
+        "name": "Usuário Inadimplente",
+        "email": "inadimplente@example.com",
+        "password": "password",
+        "createdAt": "2024-05-01T10:00:00Z",
+        "subscriptionStartDate": "2024-05-15T10:00:00Z", 
+        "status": "suspended",
+        "subscriptionStatus": "Mensal",
+        "lastPaymentStatus": "Inadimplente",
+        "storageUsed": 12000000,
+        "storageLimit": 5,
+        "checkInFrequency": 30,
+        "requireDoubleConfirmation": true,
+        "lastCheckIn": "2024-06-20T10:00:00Z",
+        "secondaryEmail": "delinquent.recovery@example.com",
+        "role": "user"
+      }
+    },
+    "admin_user_id": {
+       "document": {
+        "name": "Admin Martinho",
+        "email": "martinho@gmail.com",
+        "password": "123456",
+        "createdAt": "2024-01-01T10:00:00Z",
+        "status": "active",
+        "subscriptionStatus": "Anual",
+        "storageUsed": 50.0,
+        "storageLimit": 9999,
+        "checkInFrequency": 30,
+        "requireDoubleConfirmation": false,
+        "lastCheckIn": "2024-07-01T10:00:00Z",
+        "secondaryEmail": "admin_recovery@example.com",
+        "role": "admin"
+      }
+    }
+  }
+}

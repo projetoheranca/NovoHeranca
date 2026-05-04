@@ -1,0 +1,179 @@
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 84% 4.9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 84% 4.9%;
+    --primary: 35.8 91.7% 50%; /* Orange/Gold */
+    --primary-foreground: 210 40% 98%;
+    --secondary: 210 40% 96.1%;
+    --secondary-foreground: 222.2 47.4% 11.2%;
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+    --accent: 35.8 91.7% 50%; /* Orange/Gold */
+    --accent-foreground: 210 40% 98%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 35.8 91.7% 50%;
+    --chart-1: 35.8 91.7% 50%;
+    --chart-2: 45 90% 55%;
+    --chart-3: 180 80% 45%;
+    --chart-4: 280 65% 60%;
+    --chart-5: 340 75% 55%;
+
+    /* Type-specific colors */
+    --texto-color: 210 100% 50%; 
+    --image-color: 140 80% 50%; 
+    --video-color: 280 85% 60%; 
+    --audio-color: 340 90% 60%; 
+
+    /* Light Theme Sidebar */
+    --sidebar-background: 210 40% 98%;
+    --sidebar-foreground: 222.2 47.4% 11.2%;
+    --sidebar-primary: 35.8 91.7% 50%;
+    --sidebar-primary-foreground: 210 40% 98%;
+    --sidebar-accent: 210 40% 92%;
+    --sidebar-accent-foreground: 222.2 47.4% 11.2%;
+    --sidebar-border: 214.3 31.8% 91.4%;
+    --sidebar-ring: 222.2 84% 4.9%;
+  }
+
+  .dark {
+    --background: 222 84% 4.9%;
+    --foreground: 210 40% 98%;
+    --card: 222 84% 6.5%;
+    --card-foreground: 210 40% 98%;
+    --popover: 222 84% 4.9%;
+    --popover-foreground: 210 40% 98%;
+    --primary: 217.2 91.2% 59.8%; /* Electric Blue */
+    --primary-foreground: 210 40% 98%;
+    --secondary: 217 33% 17%;
+    --secondary-foreground: 210 40% 98%;
+    --muted: 217 33% 17%;
+    --muted-foreground: 215 20% 65%;
+    --accent: 217.2 91.2% 59.8%;
+    --accent-foreground: 210 40% 98%;
+    --destructive: 0 63% 31%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 217 33% 17%;
+    --input: 217 33% 17%;
+    --ring: 217.2 91.2% 59.8%;
+    
+    /* Dark Theme Sidebar */
+    --sidebar-background: 222 84% 4.9%;
+    --sidebar-foreground: 210 40% 98%;
+    --sidebar-primary: 217.2 91.2% 59.8%;
+    --sidebar-primary-foreground: 210 40% 98%;
+    --sidebar-accent: 217 33% 22%;
+    --sidebar-accent-foreground: 210 40% 98%;
+    --sidebar-border: 217 33% 17%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+@layer utilities {
+  @keyframes fade-in-up {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  .animate-fade-in-up {
+    animation: fade-in-up 0.8s ease-out forwards;
+  }
+  
+  .text-glow {
+    color: hsl(var(--foreground));
+    text-shadow: 0 0 2px hsl(var(--foreground)), 0 0 8px hsl(var(--primary) / 0.9), 0 0 20px hsl(var(--primary) / 0.7);
+  }
+
+  /* Efeito Azul Neon solicitado */
+  .text-neon-blue {
+    color: #00f2ff;
+    text-shadow: 0 0 5px #00f2ff, 0 0 10px #00f2ff, 0 0 20px #00f2ff, 0 0 40px rgba(0, 242, 255, 0.5);
+  }
+
+  .icon-glow {
+    filter: drop-shadow(0 0 8px hsl(var(--primary) / 0.8));
+  }
+
+  .button-glow {
+     box-shadow: 0 0 6px hsl(var(--primary) / 0.7), 
+                0 0 12px hsl(var(--primary) / 0.5);
+  }
+
+  .card-glow {
+    border: 1px solid hsl(var(--primary) / 0.3);
+    box-shadow: 0 0 15px hsl(var(--primary) / 0.1);
+  }
+  
+  .image-glow {
+     box-shadow: 0 0 20px rgba(var(--primary), 0.2);
+  }
+}
+
+/* ProseMirror / Tiptap Styles */
+.ProseMirror p {
+  margin-bottom: 1em;
+}
+.ProseMirror h1 {
+  font-size: 1.5rem;
+  font-weight: 800;
+  margin-bottom: 0.5em;
+  line-height: 1.2;
+}
+.ProseMirror h2 {
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin-bottom: 0.5em;
+}
+.ProseMirror h3 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 0.5em;
+}
+.ProseMirror ul {
+  list-style-type: disc;
+  padding-left: 1.5em;
+  margin-bottom: 1em;
+}
+.ProseMirror ol {
+  list-style-type: decimal;
+  padding-left: 1.5em;
+  margin-bottom: 1em;
+}
+.ProseMirror blockquote {
+  border-left: 3px solid hsl(var(--primary));
+  padding-left: 1em;
+  font-style: italic;
+  margin-bottom: 1em;
+}
+.ProseMirror img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+  margin: 1rem auto;
+  display: block;
+}

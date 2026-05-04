@@ -1,0 +1,33 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /{document=**} {
+      allow read, write: if request.auth != null;
+    }
+    match /users/{userId} {
+      allow read, write: if request.auth.uid == userId;
+
+      match /profile {
+        allow read, write: if request.auth.uid == userId;
+      }
+
+      match /memories/{memoryId} {
+        allow read, write: if request.auth.uid == userId;
+
+        match /recipients/{recipientId} {
+          allow read, write: if request.auth.uid == userId;
+        }
+      }
+
+      match /checkIns/{checkInId} {
+        allow read: if request.auth.uid == userId;
+        allow write: if false;
+      }
+
+      match /payments/{paymentId} {
+        allow read: if request.auth.uid == userId;
+        allow write: if false;
+      }
+    }
+  }
+}

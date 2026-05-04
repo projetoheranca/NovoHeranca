@@ -1,0 +1,340 @@
+
+{
+  "entities": {
+    "UserProfile": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "UserProfile",
+      "type": "object",
+      "description": "Represents a user profile in the Herança Digital application.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the user profile."
+        },
+        "email": {
+          "type": "string",
+          "description": "User's email address.",
+          "format": "email"
+        },
+        "password": {
+          "type": "string",
+          "description": "User's password (stored as plain text - NOT SECURE)."
+        },
+        "createdAt": {
+          "type": "string",
+          "description": "Timestamp indicating when the user profile was created.",
+          "format": "date-time"
+        },
+        "lastCheckIn": {
+          "type": "string",
+          "description": "Timestamp of the user's last check-in.",
+          "format": "date-time"
+        },
+        "checkInFrequency": {
+          "type": "number",
+          "description": "Frequency of check-ins required (in days)."
+        },
+        "isActive": {
+          "type": "boolean",
+          "description": "Indicates whether the user account is active."
+        },
+        "subscriptionStatus": {
+          "type": "string",
+          "description": "Current subscription status of the user (e.g., 'active', 'suspended')."
+        },
+        "storageUsed": {
+          "type": "number",
+          "description": "Amount of storage space used by the user (in GB)."
+        },
+        "storageLimit": {
+          "type": "number",
+          "description": "Maximum storage space allowed for the user (in GB)."
+        },
+        "secondaryEmail": {
+          "type": "string",
+          "description": "Secondary email address for double confirmation and recovery.",
+          "format": "email"
+        },
+        "requireDoubleConfirmation": {
+          "type": "boolean",
+          "description": "Indicates whether double confirmation is required before memory delivery."
+        },
+        "role": {
+          "type": "string",
+          "description": "The role of the user (e.g., 'user', 'admin')."
+        },
+        "cpfHash": {
+            "type": "string",
+            "description": "SHA-256 hash of the user's CPF for uniqueness checks, respecting LGPD."
+        },
+        "sessionTimeout": {
+          "type": "number",
+          "description": "Session timeout in minutes."
+        }
+      },
+      "required": [
+        "id",
+        "email",
+        "password",
+        "createdAt",
+        "isActive",
+        "subscriptionStatus",
+        "storageUsed",
+        "storageLimit",
+        "requireDoubleConfirmation",
+        "role"
+      ]
+    },
+    "Memory": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "Memory",
+      "type": "object",
+      "description": "Represents a digital memory stored in the Herança Digital application.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the memory."
+        },
+        "title": {
+          "type": "string",
+          "description": "Title of the memory."
+        },
+        "description": {
+          "type": "string",
+          "description": "Description of the memory."
+        },
+        "type": {
+          "type": "string",
+          "description": "Type of memory (e.g., 'video', 'audio', 'text', 'image')."
+        },
+        "content": {
+          "type": "string",
+          "description": "Content of the memory (for text) or a reference to media."
+        },
+        "fileUrl": {
+          "type": "string",
+          "description": "URL of the media file (for video, audio, image)."
+        },
+        "fileSize": {
+          "type": "number",
+          "description": "Size of the media file (in bytes)."
+        },
+        "createdAt": {
+          "type": "string",
+          "description": "Timestamp indicating when the memory was created.",
+          "format": "date-time"
+        },
+        "recipients": {
+          "type": "array",
+          "description": "Array of recipient IDs. (Relationship: Memory 1:N Recipient)",
+          "items": {
+            "type": "string"
+          }
+        },
+        "tags": {
+          "type": "array",
+          "description": "Array of tags associated with the memory.",
+          "items": {
+            "type": "string"
+          }
+        },
+        "isDelivered": {
+          "type": "boolean",
+          "description": "Indicates whether the memory has been delivered to recipients."
+        },
+        "deliveredAt": {
+          "type": "string",
+          "description": "Timestamp indicating when the memory was delivered.",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "id",
+        "title",
+        "description",
+        "type",
+        "createdAt",
+        "recipients",
+        "isDelivered"
+      ]
+    },
+    "Recipient": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "Recipient",
+      "type": "object",
+      "description": "Represents a recipient of digital memories in the Herança Digital application.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the recipient."
+        },
+        "name": {
+          "type": "string",
+          "description": "Full name of the recipient."
+        },
+        "email": {
+          "type": "string",
+          "description": "Email address of the recipient.",
+          "format": "email"
+        },
+        "phone": {
+          "type": "string",
+          "description": "Phone number of the recipient."
+        },
+        "relationship": {
+          "type": "string",
+          "description": "Relationship of the recipient to the user (e.g., 'family', 'friend')."
+        },
+        "personalMessage": {
+          "type": "string",
+          "description": "Personal message for the recipient."
+        },
+        "createdAt": {
+          "type": "string",
+          "description": "Timestamp indicating when the recipient was added.",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "id",
+        "name",
+        "email",
+        "relationship",
+        "createdAt"
+      ]
+    },
+    "CheckIn": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "CheckIn",
+      "type": "object",
+      "description": "Represents a user check-in event.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the check-in event."
+        },
+        "timestamp": {
+          "type": "string",
+          "description": "Timestamp of the check-in event.",
+          "format": "date-time"
+        },
+        "method": {
+          "type": "string",
+          "description": "Method of check-in (e.g., 'manual', 'automatic')."
+        },
+        "userId": {
+          "type": "string",
+          "description": "Reference to UserProfile. (Relationship: UserProfile 1:N CheckIn)"
+        }
+      },
+      "required": [
+        "id",
+        "timestamp",
+        "method",
+        "userId"
+      ]
+    },
+    "Payment": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "Payment",
+      "type": "object",
+      "description": "Represents a payment transaction.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the payment transaction."
+        },
+        "amount": {
+          "type": "number",
+          "description": "Amount of the payment."
+        },
+        "currency": {
+          "type": "string",
+          "description": "Currency of the payment."
+        },
+        "status": {
+          "type": "string",
+          "description": "Status of the payment (e.g., 'pending', 'completed', 'failed')."
+        },
+        "provider": {
+          "type": "string",
+          "description": "Payment provider (e.g., 'mercadopago', 'googleplay', 'paypal')."
+        },
+        "createdAt": {
+          "type": "string",
+          "description": "Timestamp indicating when the payment was created.",
+          "format": "date-time"
+        },
+        "externalId": {
+          "type": "string",
+          "description": "External ID of the transaction from the payment provider."
+        },
+        "userId": {
+          "type": "string",
+          "description": "Reference to UserProfile. (Relationship: UserProfile 1:N Payment)"
+        }
+      },
+      "required": [
+        "id",
+        "amount",
+        "currency",
+        "status",
+        "provider",
+        "createdAt",
+        "externalId",
+        "userId"
+      ]
+    },
+    "ScheduledMemory": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "ScheduledMemory",
+      "type": "object",
+      "description": "Represents a memory scheduled for future delivery.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the scheduled memory."
+        },
+        "date": {
+          "type": "string",
+          "description": "The specific date for delivery.",
+          "format": "date"
+        },
+        "memoryId": {
+          "type": "string",
+          "description": "Reference to the Memory to be sent."
+        },
+        "recipientId": {
+          "type": "string",
+          "description": "Reference to the Recipient who will receive it."
+        },
+        "message": {
+          "type": "string",
+          "description": "A custom message to be included in the delivery email."
+        },
+        "status": {
+          "type": "string",
+          "description": "Status of the scheduled delivery (e.g., 'scheduled', 'sent', 'failed')."
+        },
+        "createdAt": {
+          "type": "string",
+          "description": "Timestamp indicating when the memory was scheduled.",
+          "format": "date-time"
+        },
+        "sentAt": {
+          "type": "string",
+          "description": "Timestamp indicating when the memory was actually sent.",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "id",
+        "date",
+        "memoryId",
+        "recipientId",
+        "status",
+        "createdAt"
+      ]
+    }
+  }
+}

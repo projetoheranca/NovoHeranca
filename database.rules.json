@@ -1,0 +1,36 @@
+
+{
+  "rules": {
+    "users": {
+      "$uid": {
+        ".read": "$uid === auth.uid || root.child('users').child(auth.uid).child('document').child('role').val() === 'admin'",
+        ".write": "$uid === auth.uid || root.child('users').child(auth.uid).child('document').child('role').val() === 'admin'",
+        "scheduledMemories": {
+          ".indexOn": "status"
+        }
+      },
+      ".indexOn": ["document/email"]
+    },
+    "leads": {
+      ".read": "root.child('users').child(auth.uid).child('document').child('role').val() === 'admin'",
+      ".write": "root.child('users').child(auth.uid).child('document').child('role').val() === 'admin'",
+      ".indexOn": ["email"]
+    },
+    "cancellationRequests": {
+      ".read": "root.child('users').child(auth.uid).child('document').child('role').val() === 'admin'",
+      ".write": "root.child('users').child(auth.uid).child('document').child('role').val() === 'admin'"
+    },
+    "cardFingerprints": {
+      ".read": false,
+      ".write": false
+    },
+    "cpfFingerprints": {
+        ".read": false,
+        ".write": false
+    },
+    "deliveryTokens": {
+      ".read": false,
+      ".write": false
+    }
+  }
+}
