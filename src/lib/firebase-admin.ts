@@ -5,10 +5,6 @@ import 'dotenv/config'; // Mantido para possível uso em desenvolvimento local
 import admin from 'firebase-admin';
 import type { ServiceAccount } from 'firebase-admin';
 
-// Importa diretamente o arquivo de credenciais JSON.
-// Isso torna a inicialização independente das variáveis de ambiente no servidor.
-import serviceAccountCredentials from '../../minhaheranca.json';
-
 // O nome ÚNICO e CONSISTENTE para o app do Firebase Admin no servidor.
 const ADMIN_APP_NAME = 'firebase-admin-heranca-digital-main-app';
 
@@ -29,20 +25,49 @@ export async function getAdminServices() {
     let app = getExistingApp();
 
     if (!app) {
-        // Usa as credenciais importadas diretamente do arquivo JSON.
-        const serviceAccount = serviceAccountCredentials as ServiceAccount;
+        // Carrega as credenciais dinamicamente para evitar erro de compilação quando o arquivo JSON não existe (ex: produção)
+        let serviceAccount: ServiceAccount | null = null;
+
+        if (process.env.FIREBASE_PROJECT_ID && process.env.FIREBASE_CLIENT_EMAIL && process.env.FIREBASE_PRIVATE_KEY) {
+            serviceAccount = {
+                projectId: process.env.FIREBASE_PROJECT_ID,
+                clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
+                privateKey: process.env.FIREBASE_PRIVATE_KEY.replace(/\\n/g, '\n'),
+            };
+        } else {
+            try {
+                const fs = require('fs');
+                const path = require('path');
+                const credentialsPath = path.join(process.cwd(), 'minhaheranca.json');
+                if (fs.existsSync(credentialsPath)) {
+                    serviceAccount = JSON.parse(fs.readFileSync(credentialsPath, 'utf8')) as ServiceAccount;
+                }
+            } catch (error) {
+                console.warn('[FIREBASE_ADMIN] Não foi possível carregar as credenciais locais do arquivo minhaheranca.json:', error);
+            }
+        }
 
         // Define as URLs do banco de dados e storage para garantir que sejam encontradas no ambiente de produção.
         const databaseURL = "https://studio-8232085638-4768f-default-rtdb.firebaseio.com";
         const storageBucket = "studio-8232085638-4768f.appspot.com";
 
-        if (!serviceAccount.project_id || !serviceAccount.client_email || !serviceAccount.private_key) {
-            console.error('[FATAL_ERROR] O arquivo de credenciais do Firebase Admin (minhaheranca.json) está incompleto ou inválido.');
-            throw new Error('Configuração do servidor Firebase incompleta.');
+        let credential;
+        if (serviceAccount && serviceAccount.project_id && serviceAccount.client_email && serviceAccount.private_key) {
+            credential = admin.credential.cert(serviceAccount);
+        } else if (serviceAccount && (serviceAccount as any).projectId && (serviceAccount as any).clientEmail && (serviceAccount as any).privateKey) {
+            credential = admin.credential.cert(serviceAccount);
+        } else {
+            // Tenta usar as credenciais padrão do ambiente Google Cloud (App Hosting)
+            try {
+                credential = admin.credential.applicationDefault();
+            } catch (e) {
+                console.error('[FATAL_ERROR] Nenhuma credencial do Firebase Admin foi encontrada (minhaheranca.json ou variáveis de ambiente ausentes).');
+                throw new Error('Configuração do servidor Firebase incompleta.');
+            }
         }
 
         app = admin.initializeApp({
-            credential: admin.credential.cert(serviceAccount),
+            credential: credential,
             databaseURL: databaseURL,
             storageBucket: storageBucket,
         }, ADMIN_APP_NAME);
