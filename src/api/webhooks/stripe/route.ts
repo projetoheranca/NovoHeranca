@@ -116,6 +116,7 @@ export async function POST(req: Request) {
           subscriptionStartDate: new Date().toISOString(),
           lastPaymentFailedAt: null, 
           delinquencyNotifiedAt: null,
+          accountStatus: 'active'
         });
 
         console.log(`[WEBHOOK] Assinatura do usuário ${firebaseUID} atualizada para o plano ${planInfo.name}.`);

@@ -3,6 +3,7 @@
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useSession } from '@/context/session-provider';
+import { cn } from '@/lib/utils';
 
 import {
   SidebarProvider,
@@ -11,10 +12,9 @@ import {
   SidebarContent,
   SidebarFooter,
   SidebarInset,
-  SidebarTrigger,
   SidebarRail,
 } from "@/components/ui/sidebar";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { LogOut, Loader2, Clock } from "lucide-react";
 import Link from "next/link";
@@ -31,6 +31,23 @@ export default function DashboardLayout({
 }) {
   const { session, isLoading, logout } = useSession();
   const router = useRouter();
+
+  // --- CONTROLE DE EXPIRAÇÃO DE TRIAL ---
+  useEffect(() => {
+    if (isLoading || !session) return;
+
+    if (session.accountStatus === 'trial' && session.trialEndDate) {
+      const hasExpired = new Date(session.trialEndDate) < new Date();
+      if (hasExpired) {
+        import('@/firebase/config').then(({ database }) => {
+          import('firebase/database').then(({ ref, update }) => {
+            const userRef = ref(database, `users/${session.uid}/document`);
+            update(userRef, { accountStatus: 'expired' });
+          });
+        });
+      }
+    }
+  }, [session, isLoading]);
 
   useEffect(() => {
     if (isLoading) return;
@@ -54,9 +71,45 @@ export default function DashboardLayout({
     );
   }
 
+  // --- TELA DE BLOQUEIO POR EXPIRAÇÃO ---
+  if (session.accountStatus === 'expired') {
+      return (
+        <div className="flex min-h-screen flex-col items-center justify-center bg-background p-4 text-center">
+            <Card className="max-w-md w-full card-glow border-destructive/50 animate-fade-in-up">
+                <CardContent className="pt-10 pb-10 space-y-6">
+                    <div className="relative inline-block">
+                        <div className="absolute inset-0 bg-destructive/20 blur-xl rounded-full animate-pulse animate-duration-1000" />
+                        <Clock className="h-16 w-16 text-destructive mx-auto relative z-10" />
+                    </div>
+                    <h1 className="text-2xl font-black text-glow text-destructive">Seu período de teste acabou</h1>
+                    <p className="text-muted-foreground text-sm">
+                        Para continuar usando o Minha Herança Digital e manter seus dados protegidos, escolha uma forma de pagamento:
+                    </p>
+                    <div className="space-y-3 pt-4">
+                        <Button asChild className="w-full button-glow font-bold" size="lg">
+                            <Link href="/checkout/mensal">
+                                Pagar com Cartão de Crédito (R$ 24,90/mês)
+                            </Link>
+                        </Button>
+                        <Button asChild variant="outline" className="w-full font-bold border-green-600/50 hover:bg-green-500/10 text-green-500" size="lg">
+                            <Link href="/pix-checkout/mensal">
+                                Pagar com Pix (R$ 24,90/mês)
+                            </Link>
+                        </Button>
+                        <hr className="border-border my-4" />
+                        <Button variant="ghost" onClick={handleLogout} className="w-full">
+                            Sair da conta
+                        </Button>
+                    </div>
+                </CardContent>
+            </Card>
+            <p className="mt-8 text-xs text-muted-foreground">Seus dados e memórias cadastrados estão preservados com segurança.</p>
+        </div>
+      );
+  }
+
   // --- TRAVA DE SEGURANÇA: AGUARDANDO WEBHOOK ---
-  // Se o pagamento ainda está pendente, não deixa entrar no painel real.
-  if (session.lastPaymentStatus === 'Pendente') {
+  if (session.lastPaymentStatus === 'Pendente' && session.accountStatus !== 'trial') {
       return (
         <div className="flex min-h-screen flex-col items-center justify-center bg-background p-4 text-center">
             <Card className="max-w-md w-full card-glow">
@@ -85,6 +138,37 @@ export default function DashboardLayout({
   }
   
   const userInitials = session.email?.charAt(0).toUpperCase() || '?';
+
+  // --- COMPONENTE DO BANNER DE CONTAGEM REGRESSIVA DO TRIAL ---
+  let bannerElement = null;
+  if (session.accountStatus === 'trial' && session.trialEndDate) {
+    const trialEndDate = new Date(session.trialEndDate);
+    const diffTime = trialEndDate.getTime() - Date.now();
+    const daysRemaining = Math.max(0, Math.ceil(diffTime / (1000 * 60 * 60 * 24)));
+    const isUrgent = daysRemaining <= 3;
+
+    let bannerMessage = `Seu teste gratuito termina em ${daysRemaining} dia${daysRemaining !== 1 ? 's' : ''}.`;
+    if (daysRemaining === 0) {
+      bannerMessage = `Seu teste termina HOJE. Assine para não perder acesso.`;
+    }
+
+    bannerElement = (
+      <div className={cn(
+        "w-full px-4 py-2 flex flex-col sm:flex-row items-center justify-center gap-3 text-xs font-bold border-b transition-all duration-300 z-20",
+        isUrgent
+          ? "bg-red-500/10 border-red-500/30 text-red-500 animate-pulse dark:bg-red-500/5"
+          : "bg-primary/10 border-primary/20 text-primary"
+      )}>
+        <div className="flex items-center gap-2">
+          <Clock className={cn("h-4 w-4 shrink-0", isUrgent ? "text-red-500" : "text-primary")} />
+          <span>{bannerMessage}</span>
+        </div>
+        <Button asChild size="sm" variant={isUrgent ? "destructive" : "default"} className="font-bold shrink-0 rounded-full h-7 px-3 text-xs button-glow">
+          <Link href="/dashboard/subscription">Assinar Agora</Link>
+        </Button>
+      </div>
+    );
+  }
 
   return (
     <SidebarProvider>
@@ -122,6 +206,7 @@ export default function DashboardLayout({
         </SidebarFooter>
       </Sidebar>
        <SidebarInset>
+        {bannerElement}
         <Header />
         {children}
       </SidebarInset>

@@ -76,18 +76,14 @@ export default function SignupPage() {
       });
 
       if (result.success) {
-        // 2. Realiza o login automático no cliente para garantir a sessão no checkout
+        // 2. Realiza o login automático no cliente para garantir a sessão no dashboard
         await signInWithEmailAndPassword(clientAuth, email, password);
         
         pushToDataLayer('signup_success', { plan_selected: plan, payment_method: method });
-        toast({ title: "Conta criada!", description: "Vamos configurar seu pagamento." });
+        toast({ title: "Conta criada!", description: "Bem-vindo ao Minha Herança Digital!" });
         
-        // 3. Redirecionamento obrigatório
-        if (method === 'pix') {
-            router.push(`/pix-checkout/${plan}`);
-        } else {
-            router.push(`/checkout/${plan}`);
-        }
+        // 3. Redirecionamento direto para o dashboard (trial de 14 dias)
+        router.push("/dashboard");
       } else {
         throw new Error(result.message);
       }
@@ -108,10 +104,7 @@ export default function SignupPage() {
               </Link>
             <CardTitle className="text-2xl font-black text-glow">Crie sua Conta</CardTitle>
             <CardDescription>
-              {method === 'pix' 
-                ? 'Pague com PIX para liberar acesso imediato.'
-                : 'Inicie seu teste de 14 dias com Cartão.'
-              }
+              Crie sua conta gratuita e experimente por 14 dias sem compromisso.
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
@@ -122,6 +115,10 @@ export default function SignupPage() {
             <div className="space-y-2">
               <Label htmlFor="email">Email</Label>
               <Input id="email" type="email" placeholder="seu@email.com" required value={email} onChange={(e) => setEmail(e.target.value)} disabled={isLoading} />
+            </div>
+             <div className="space-y-2">
+              <Label htmlFor="phone">Telefone</Label>
+              <Input id="phone" placeholder="(00) 00000-0000" required value={phone} onChange={(e) => setPhone(e.target.value)} disabled={isLoading} />
             </div>
              <div className="space-y-2">
               <Label htmlFor="cpf">CPF</Label>
@@ -138,7 +135,7 @@ export default function SignupPage() {
           </CardContent>
           <CardFooter className="flex flex-col gap-4">
             <Button type="submit" className="w-full button-glow rounded-full font-bold" disabled={isLoading || !termsAccepted}>
-              {isLoading ? <Loader2 className="animate-spin" /> : "Continuar para Pagamento"}
+              {isLoading ? <Loader2 className="animate-spin" /> : "Começar Teste Grátis"}
             </Button>
             <div className="text-center text-sm">
               Já tem conta? <Link href="/login" className="underline font-bold">Faça login</Link>

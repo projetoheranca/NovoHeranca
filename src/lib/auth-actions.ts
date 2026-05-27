@@ -19,7 +19,7 @@ export async function signupUser(payload: {name: string, email: string, phone?: 
 
         const cpfHash = createHash('sha256').update(cpf).digest('hex');
         const cpfSnapshot = await db.ref(`cpfFingerprints/${cpfHash}`).get();
-        if (cpfSnapshot.exists()) throw new Error("Este CPF já possui um trial ativo ou usado.");
+        if (cpfSnapshot.exists()) throw new Error("Este CPF já possui uma conta. Faça login.");
         
         const userRecord = await auth.createUser({
             email,
@@ -31,19 +31,28 @@ export async function signupUser(payload: {name: string, email: string, phone?: 
         const uid = userRecord.uid;
         await db.ref(`cpfFingerprints/${cpfHash}`).set({ userId: uid, createdAt: new Date().toISOString() });
 
-        const now = new Date().toISOString();
+        const now = new Date();
+        const trialEndDate = new Date();
+        trialEndDate.setDate(now.getDate() + 14);
+
+        const nowStr = now.toISOString();
+        const trialEndStr = trialEndDate.toISOString();
+
         const newUserProfileData: Omit<UserProfile, 'id' | 'uid' > = {
-            name, email, phone: phone || "", password, cpfHash, createdAt: now, lastCheckIn: now,
-            status: 'waiting_payment', // Inicia aguardando confirmação do Stripe
+            name, email, phone: phone || "", password, cpfHash, createdAt: nowStr, lastCheckIn: nowStr,
+            status: 'trialing', 
             checkInStatus: 'ok',
-            subscriptionStatus: 'Pendente',
-            subscriptionStartDate: now,
+            subscriptionStatus: 'Trial',
+            subscriptionStartDate: nowStr,
             lastPaymentStatus: 'Pendente',
             lastPaymentMethod: method === 'pix' ? 'pix' : 'card',
             storageUsed: 0, storageLimit: 50, checkInFrequency: 30, deliveryGracePeriod: 7,
             requireDoubleConfirmation: false, cancellationRequested: false, role: 'user',
             sessionTimeout: 15, failedLoginAttempts: 0, lockoutUntil: null,
-            referredBy: referredBy || null, trialAbuseDetected: false
+            referredBy: referredBy || null, trialAbuseDetected: false,
+            trialStartDate: nowStr,
+            trialEndDate: trialEndStr,
+            accountStatus: 'trial'
         };
 
         await db.ref(`users/${uid}/document`).set(newUserProfileData);

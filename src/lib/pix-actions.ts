@@ -124,6 +124,8 @@ export async function verifyPixPayment(payload: { paymentId: number }): Promise<
                 lastPaymentStatus: 'Pago',
                 status: 'active',
                 subscriptionStartDate: new Date().toISOString(),
+                accountStatus: 'active',
+                nextPaymentDate: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(),
             });
 
             return { success: true, isApproved: true };

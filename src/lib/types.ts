@@ -54,6 +54,10 @@ export type UserProfile = {
   subscriptionStatus: 'Mensal' | 'Anual' | 'trialing' | 'Teste' | 'Pendente' | 'Trial'; // 'trialing' é um status do Stripe
   subscriptionStartDate?: string; // ISO string for when the subscription started or was last renewed
   lastPaymentStatus?: 'Pago' | 'Inadimplente' | 'Pendente';
+  trialStartDate?: string;
+  trialEndDate?: string;
+  accountStatus?: 'trial' | 'expired' | 'active';
+  nextPaymentDate?: string;
   lastPaymentMethod?: 'card' | 'pix';
   lastPaymentFailedAt?: string | null; // ISO string for when the last payment failed
   delinquencyNotifiedAt?: string | null; // ISO string for when the first dunning email was sent

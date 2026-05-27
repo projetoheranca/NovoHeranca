@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "@/components/ui/toaster";
 import { cn } from "@/lib/utils";
@@ -7,11 +6,6 @@ import { SessionProvider } from "@/context/session-provider";
 import { ThemeProvider } from "@/components/theme-provider";
 import { ChatAssistant } from "@/components/chatbot/chat-assistant";
 import Script from "next/script"; // Importação necessária para o Google Analytics
-
-const fontInter = Inter({
-  subsets: ["latin"],
-  variable: "--font-inter",
-});
 
 const siteUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://minhaherancadigital.com';
 
@@ -65,8 +59,7 @@ export default function RootLayout({
       </head>
       <body
         className={cn(
-          "min-h-screen bg-background font-body antialiased",
-          fontInter.variable,
+          "min-h-screen bg-background font-body antialiased"
         )}
       >
         {/* Google Tag Manager (noscript) */}
