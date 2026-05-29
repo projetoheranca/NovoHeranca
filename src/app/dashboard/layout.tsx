@@ -81,19 +81,19 @@ export default function DashboardLayout({
                         <div className="absolute inset-0 bg-destructive/20 blur-xl rounded-full animate-pulse animate-duration-1000" />
                         <Clock className="h-16 w-16 text-destructive mx-auto relative z-10" />
                     </div>
-                    <h1 className="text-2xl font-black text-glow text-destructive">Seu período de teste acabou</h1>
+                    <h1 className="text-2xl font-black text-glow text-destructive">Proteja o seu legado digital hoje</h1>
                     <p className="text-muted-foreground text-sm">
-                        Para continuar usando o Minha Herança Digital e manter seus dados protegidos, escolha uma forma de pagamento:
+                        O seu período de testes terminou. Mantenha suas senhas, memórias e documentos mais preciosos seguros e prontos para quem você ama. Escolha como deseja continuar sua proteção:
                     </p>
                     <div className="space-y-3 pt-4">
                         <Button asChild className="w-full button-glow font-bold" size="lg">
                             <Link href="/checkout/mensal">
-                                Pagar com Cartão de Crédito (R$ 24,90/mês)
+                                Ativar Proteção por Cartão (R$ 24,90/mês)
                             </Link>
                         </Button>
                         <Button asChild variant="outline" className="w-full font-bold border-green-600/50 hover:bg-green-500/10 text-green-500" size="lg">
                             <Link href="/pix-checkout/mensal">
-                                Pagar com Pix (R$ 24,90/mês)
+                                Ativar Proteção por Pix (R$ 24,90/mês)
                             </Link>
                         </Button>
                         <hr className="border-border my-4" />

@@ -146,10 +146,10 @@ export default function CheckoutPage() {
   const isMonthlyTrial = plan.name.toLowerCase() === 'mensal';
   const price = plan.priceYearly !== "N/A" ? plan.priceYearly : plan.priceMonthly;
   const period = plan.priceYearly !== "N/A" ? "/ano" : "/mês";
-  const cardButtonText = isMonthlyTrial ? 'Iniciar Teste Grátis (14 dias)' : 'Ir para Pagamento Seguro';
+  const cardButtonText = isMonthlyTrial ? 'Iniciar Proteção Gratuita (14 dias)' : 'Ir para Ativação Segura';
   const cardDescription = isMonthlyTrial
-    ? "Vamos registrar seu cartão para o período de teste. Nenhuma cobrança será feita hoje."
-    : "Você será redirecionado para um ambiente seguro para finalizar a compra.";
+    ? "Cadastre seu cartão para iniciar seu período de segurança. Você terá 14 dias gratuitos para proteger suas informações mais preciosas, e nenhuma cobrança é feita hoje."
+    : "Você será redirecionado para a ativação segura de sua conta.";
 
   return (
     <div className="flex flex-col min-h-screen bg-muted/40">
@@ -160,7 +160,7 @@ export default function CheckoutPage() {
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <CreditCard className="h-6 w-6" />
-                Informações de Pagamento
+                Configuração da sua Proteção
               </CardTitle>
               <CardDescription>{cardDescription}</CardDescription>
             </CardHeader>
@@ -191,10 +191,10 @@ export default function CheckoutPage() {
                             textShadow: '0px 0px 1px black, 0px 0px 1px black, 0px 0px 1px black, 0px 0px 1px black'
                         }}>
                             <Link href={`/pix-checkout/${planName}`} onClick={() => pushToDataLayer('add_payment_info', { payment_type: 'pix', plan_selected: plan.name })}>
-                                <DollarSign className="mr-2 h-4 w-4" /> Pagar {price} com PIX
+                                <DollarSign className="mr-2 h-4 w-4" /> Ativar Cofre com PIX
                             </Link>
                         </Button>
-                         <p className="text-xs text-muted-foreground mt-1">Acesso imediato, sem período de teste</p>
+                         <p className="text-xs text-muted-foreground mt-1">Ativação instantânea do seu cofre de memórias, sem precisar de cartão</p>
                     </div>
 
                     <Button onClick={handleCancelPurchase} type="button" variant="link" size="sm" className="text-muted-foreground mt-2">
@@ -231,8 +231,8 @@ export default function CheckoutPage() {
                 </div>
                  {isMonthlyTrial && (
                    <div className="text-xs text-muted-foreground text-center pt-2 space-y-1">
-                      <p><strong>Pagando com Cartão:</strong> Você só será cobrado em R$ 24,90 daqui a 14 dias.</p>
-                      <p><strong>Pagando com PIX:</strong> O valor de {price} será cobrado para acesso imediato.</p>
+                      <p><strong>Com Cartão:</strong> Você protege suas memórias gratuitamente hoje. A assinatura de R$ 24,90 só inicia daqui a 14 dias.</p>
+                      <p><strong>Com PIX:</strong> Ativação imediata do seu legado por {price} (sem necessidade de cadastrar cartão).</p>
                    </div>
                 )}
               </CardContent>
