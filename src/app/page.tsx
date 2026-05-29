@@ -223,7 +223,7 @@ export default function LandingPage() {
                <Button size="lg" asChild className="bg-red-600 hover:bg-red-700 text-white font-bold text-lg button-glow">
                 <Link href="/signup?plan=mensal" onClick={() => pushToDataLayer('cta_click', { button_name: 'hero_cta', location: 'hero' })}>Preparar Minha Herança Digital Agora</Link>
               </Button>
-              <p className="text-sm text-white/80">(Teste por 14 dias - Cartão necessário)</p>
+              <p className="text-sm text-white/80">(Experimente grátis por 14 dias - Sem precisar de cartão)</p>
                <p className="mt-4 text-sm font-semibold flex items-center gap-2 animate-pulse"><AlertTriangle className="h-4 w-4 text-yellow-300" /> Cada dia sem preparação é um dia de risco</p>
             </div>
           </div>
@@ -310,13 +310,13 @@ export default function LandingPage() {
                     <div className="flex items-center gap-2"><Check className="h-5 w-5 text-primary"/> Guarde localização de valores</div>
                     <div className="flex items-center gap-2"><Check className="h-5 w-5 text-primary"/> Grave histórias e conselhos</div>
                     <div className="flex items-center gap-2"><Check className="h-5 w-5 text-primary"/> Deixe últimas palavras</div>
-                    <div className="flex items-center gap-2 col-span-2 lg:col-span-1 justify-center"><Check className="h-5 w-5 text-primary"/> Entrega automática</div>
+                    <div className="flex items-center gap-2 col-span-2 lg:grid-cols-1 justify-center"><Check className="h-5 w-5 text-primary"/> Entrega automática</div>
                 </div>
                  <div className="mt-12 flex flex-col items-center gap-2">
                     <Button asChild size="lg" className="button-glow">
                         <Link href="/signup?plan=mensal" onClick={() => pushToDataLayer('cta_click', { button_name: 'video_cta', location: 'video_section' })}>Começar Agora (Teste por 14 dias)</Link>
                     </Button>
-                    <p className="text-sm text-muted-foreground">✓ Teste por 14 dias  •  ✓ Cartão necessário  •  ✓ Configure em 5 minutos</p>
+                    <p className="text-sm text-muted-foreground">✓ Teste por 14 dias  •  ✓ Sem precisar de cartão  •  ✓ Configure em 5 minutos</p>
                 </div>
             </div>
         </section>
@@ -461,11 +461,11 @@ export default function LandingPage() {
                             <CardFooter className="flex-col gap-2">
                                <Button asChild className={cn("w-full", isRecommended && "button-glow")} variant={isRecommended ? "default" : "outline"}>
                                     <Link href={linkHref} onClick={() => pushToDataLayer('cta_click', { button_name: 'plan_cta', location: 'plans_section', plan_selected: plan.name })}>
-                                        {plan.name === 'Teste' ? 'Começar Teste' : 'Assinar Agora'}
+                                        {plan.name === 'Mensal' ? 'Começar Teste Grátis' : plan.name === 'Teste' ? 'Começar Teste' : 'Assinar Agora'}
                                     </Link>
                                 </Button>
                                 <p className="text-xs text-muted-foreground">
-                                    {plan.name === 'Teste' ? 'Cartão necessário' : 'Cancele quando quiser'}
+                                    {plan.name === 'Anual' ? 'Cancele quando quiser' : 'Sem cartão necessário'}
                                 </p>
                             </CardFooter>
                         </Card>

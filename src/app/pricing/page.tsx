@@ -117,7 +117,7 @@ const faqCategories = [
     questions: [
         {
             question: "19. Quanto custa?",
-            answer: "<strong>PLANO MENSAL:</strong> R$ 24,90/mês com 50 GB. <strong>PLANO ANUAL:</strong> R$ 209,30/ano (R$ 17,44/mês - 30% de economia) com 100 GB e bônus.<br/><br/><strong>IMPORTANTE:</strong><br/>- <strong>Cartão de Crédito:</strong> Permite um teste gratuito de 14 dias. A cobrança é automática após o período, se não for cancelado.<br/>- <strong>PIX:</strong> É um pagamento imediato, sem período de teste. O acesso é liberado após a confirmação."
+            answer: "<strong>PLANO MENSAL:</strong> R$ 24,90/mês com 50 GB. <strong>PLANO ANUAL:</strong> R$ 209,30/ano (R$ 17,44/mês - 30% de economia) com 100 GB e bônus.<br/><br/><strong>IMPORTANTE:</strong><br/>- <strong>Teste Gratuito:</strong> Você cria sua conta gratuitamente e experimenta por 14 dias sem precisar cadastrar cartão no início. Após o teste, você escolhe se prefere continuar assinando via Cartão ou PIX para manter seu cofre seguro.<br/>- <strong>Ativação:</strong> O acesso completo às configurações do cofre é imediato e liberado gratuitamente por 14 dias."
         },
         {
             question: "20. O que acontece se eu cancelar minha assinatura?",
@@ -274,7 +274,7 @@ export default function PricingPage() {
                                             <AlertTriangle className="h-4 w-4 !left-2 !top-3 text-primary" />
                                             <AlertTitle className="font-bold text-primary">Teste Gratuito de 14 Dias</AlertTitle>
                                             <AlertDescription className="text-xs">
-                                                Disponível apenas para pagamento com <strong>Cartão de Crédito</strong>.
+                                                Crie sua conta hoje. <strong>Não pedimos cartão de crédito para começar</strong>.
                                             </AlertDescription>
                                         </Alert>
 
@@ -291,16 +291,16 @@ export default function PricingPage() {
                                        <Button asChild className={cn("w-full", isRecommended && "button-glow")} variant={"default"}>
                                             <Link href={cardCheckoutLink}>
                                                 <CreditCard className="mr-2"/>
-                                                {isRecommended ? 'Começar Teste com Cartão' : 'Assinar com Cartão'}
+                                                {isRecommended ? 'Começar Teste Grátis' : 'Assinar com Cartão'}
                                             </Link>
                                         </Button>
                                         <Button asChild className="w-full" variant="outline">
                                              <Link href={pixCheckoutLink} className="flex items-center gap-2">
                                                 <DollarSign className="mr-2 h-4 w-4" />
-                                                {plan.name === 'Anual' ? 'Pagar R$ 209,30 com PIX' : 'Pagar R$ 24,90 com PIX'}
+                                                {plan.name === 'Anual' ? 'Assinar Plano Anual' : 'Escolher Plano Mensal'}
                                             </Link>
                                         </Button>
-                                        <p className="text-xs text-muted-foreground pt-1">Pagamento com PIX não inclui teste gratuito.</p>
+                                        <p className="text-xs text-muted-foreground pt-1">Experimente grátis por 14 dias. Ative com Pix ou Cartão depois do teste.</p>
                                     </CardFooter>
                                 </Card>
                                 );
