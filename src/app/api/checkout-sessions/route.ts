@@ -38,6 +38,7 @@ export async function POST(req: Request) {
     // LÓGICA DE ELIGIBILIDADE DE TRIAL: 14 dias
     const isEligibleForTrial = planName.toLowerCase() === 'mensal' && 
                                userProfile.lastPaymentStatus !== 'Pago' && 
+                               userProfile.accountStatus !== 'expired' &&
                                !userProfile.trialAbuseDetected;
 
     let stripeCustomerId = userProfile.stripeCustomerId;

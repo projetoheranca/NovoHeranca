@@ -143,13 +143,13 @@ export default function CheckoutPage() {
     );
   }
   
-  const isMonthlyTrial = plan.name.toLowerCase() === 'mensal';
+  const isMonthlyTrial = plan.name.toLowerCase() === 'mensal' && session?.accountStatus !== 'expired';
   const price = plan.priceYearly !== "N/A" ? plan.priceYearly : plan.priceMonthly;
   const period = plan.priceYearly !== "N/A" ? "/ano" : "/mês";
-  const cardButtonText = isMonthlyTrial ? 'Iniciar Proteção Gratuita (14 dias)' : 'Ir para Ativação Segura';
+  const cardButtonText = isMonthlyTrial ? 'Iniciar Proteção Gratuita (14 dias)' : 'Ativar Assinatura';
   const cardDescription = isMonthlyTrial
     ? "Cadastre seu cartão para iniciar seu período de segurança. Você terá 14 dias gratuitos para proteger suas informações mais preciosas, e nenhuma cobrança é feita hoje."
-    : "Você será redirecionado para a ativação segura de sua conta.";
+    : "Para reativar sua conta e manter seguros os seus documentos, senhas e memórias mais preciosas, ative sua assinatura segura abaixo.";
 
   return (
     <div className="flex flex-col min-h-screen bg-muted/40">
@@ -160,7 +160,7 @@ export default function CheckoutPage() {
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <CreditCard className="h-6 w-6" />
-                Configuração da sua Proteção
+                {isMonthlyTrial ? "Configuração da sua Proteção" : "Ativação da sua Proteção"}
               </CardTitle>
               <CardDescription>{cardDescription}</CardDescription>
             </CardHeader>
@@ -229,10 +229,15 @@ export default function CheckoutPage() {
                     {!isMonthlyTrial && <span className="text-sm font-normal text-muted-foreground">{period}</span>}
                   </span>
                 </div>
-                 {isMonthlyTrial && (
+                 {isMonthlyTrial ? (
                    <div className="text-xs text-muted-foreground text-center pt-2 space-y-1">
                       <p><strong>Com Cartão:</strong> Você protege suas memórias gratuitamente hoje. A assinatura de R$ 24,90 só inicia daqui a 14 dias.</p>
                       <p><strong>Com PIX:</strong> Ativação imediata do seu legado por {price} (sem necessidade de cadastrar cartão).</p>
+                   </div>
+                ) : (
+                   <div className="text-xs text-muted-foreground text-center pt-2 space-y-1">
+                      <p><strong>Com Cartão:</strong> Ativação imediata da sua assinatura de R$ 24,90 para liberar o acesso ao seu cofre.</p>
+                      <p><strong>Com PIX:</strong> Ativação imediata da sua assinatura por {price} via PIX (sem período de teste).</p>
                    </div>
                 )}
               </CardContent>
