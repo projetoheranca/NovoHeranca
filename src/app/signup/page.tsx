@@ -25,6 +25,8 @@ import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth as clientAuth } from "@/firebase/config";
 import { pushToDataLayer } from "@/lib/analytics";
 
+import { useSession } from "@/context/session-provider";
+
 export default function SignupPage() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -36,10 +38,18 @@ export default function SignupPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const { toast } = useToast();
+  const { session, isLoading: isSessLoading } = useSession();
 
   const plan = searchParams.get('plan') || 'mensal';
   const method = searchParams.get('method');
   const referralId = searchParams.get('ref');
+
+  // Redirecionamento automático após login/cadastro bem-sucedido
+  useEffect(() => {
+    if (!isSessLoading && session) {
+      router.replace("/dashboard");
+    }
+  }, [session, isSessLoading, router]);
 
   useEffect(() => {
     pushToDataLayer('begin_signup', { plan_selected: plan, payment_method: method });
