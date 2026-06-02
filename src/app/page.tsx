@@ -500,7 +500,7 @@ export default function LandingPage() {
                     </Button>
                     <div className="mt-4 text-sm space-y-2">
                         <p className="flex items-center gap-2"><Check className="h-4 w-4 text-green-400"/> Teste por 14 dias</p>
-                        <p className="flex items-center gap-2"><Check className="h-4 w-4 text-green-400"/> Cartão necessário</p>
+                        <p className="flex items-center gap-2"><Check className="h-4 w-4 text-green-400"/> Sem cartão necessário</p>
                         <p className="flex items-center gap-2"><Check className="h-4 w-4 text-green-400"/> Configure em 5 minutos</p>
                         <p className="flex items-center gap-2"><Check className="h-4 w-4 text-green-400"/> Cancele quando quiser</p>
                     </div>
