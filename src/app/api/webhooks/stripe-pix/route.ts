@@ -8,11 +8,16 @@ import { getAdminServices } from '@/lib/firebase-admin';
 import { sendEmail } from '@/lib/email/send-email';
 import { calculateNewSubscriptionStartDate } from '@/lib/utils';
 
-const stripeSecretKey = process.env.STRIPE_SECRET_KEY;
-if (!stripeSecretKey) {
-  throw new Error('STRIPE_SECRET_KEY não configurada.');
-}
-const stripe = new Stripe(stripeSecretKey, { apiVersion: '2024-06-20' });
+let stripeInstance: Stripe | null = null;
+const getStripe = () => {
+  if (stripeInstance) return stripeInstance;
+  const stripeSecretKey = process.env.STRIPE_SECRET_KEY;
+  if (!stripeSecretKey) {
+    throw new Error('STRIPE_SECRET_KEY não configurada.');
+  }
+  stripeInstance = new Stripe(stripeSecretKey, { apiVersion: '2024-06-20' });
+  return stripeInstance;
+};
 
 /**
  * Lógica de Recompensa: Identifica que o indicado pagou e premia o indicador.
@@ -54,6 +59,7 @@ export async function POST(req: Request) {
 
   let event: Stripe.Event;
   try {
+    const stripe = getStripe();
     event = stripe.webhooks.constructEvent(body, signature, webhookSecret);
   } catch (err: any) {
     console.error(`[PIX_WEBHOOK_SIGNATURE_ERROR]`, err.message);
