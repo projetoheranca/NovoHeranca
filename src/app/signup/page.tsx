@@ -55,6 +55,8 @@ export default function SignupPage() {
     pushToDataLayer('begin_signup', { plan_selected: plan, payment_method: method });
   }, [plan, method]);
 
+  const [progressText, setProgressText] = useState("");
+
   const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault();
     
@@ -72,23 +74,31 @@ export default function SignupPage() {
     }
 
     setIsLoading(true);
+    setProgressText("Criando no servidor...");
 
     try {
-      // 1. Cria a conta no servidor (Firebase Admin)
-      const result = await signupUser({ 
-        name, 
-        email, 
-        phone, 
-        password,
-        cpf: cpf.replace(/\D/g, ''),
-        referredBy: referralId || undefined,
-        method: method || undefined,
-      });
+      // 1. Cria a conta no servidor (Firebase Admin) com timeout no frontend por precaução
+      const timeoutPromise = new Promise<{success: boolean, message: string}>((_, reject) => setTimeout(() => reject(new Error("Timeout: O servidor demorou muito para responder.")), 15000));
+      
+      const result = await Promise.race([
+        signupUser({ 
+          name, 
+          email, 
+          phone, 
+          password,
+          cpf: cpf.replace(/\D/g, ''),
+          referredBy: referralId || undefined,
+          method: method || undefined,
+        }),
+        timeoutPromise
+      ]);
 
       if (result.success) {
+        setProgressText("Fazendo login...");
         // 2. Realiza o login automático no cliente para garantir a sessão no dashboard
         await signInWithEmailAndPassword(clientAuth, email, password);
         
+        setProgressText("Redirecionando...");
         pushToDataLayer('signup_success', { plan_selected: plan, payment_method: method });
         toast({ title: "Conta criada!", description: "Bem-vindo ao Minha Herança Digital!" });
         
@@ -101,6 +111,7 @@ export default function SignupPage() {
       console.error("Erro no cadastro:", error);
       toast({ variant: "destructive", title: "Falha no cadastro", description: error.message || "Ocorreu um erro ao criar sua conta." });
       setIsLoading(false);
+      setProgressText("");
     }
   };
 
@@ -145,7 +156,12 @@ export default function SignupPage() {
           </CardContent>
           <CardFooter className="flex flex-col gap-4">
             <Button type="submit" className="w-full button-glow rounded-full font-bold" disabled={isLoading || !termsAccepted}>
-              {isLoading ? <Loader2 className="animate-spin" /> : "Começar Teste Grátis"}
+              {isLoading ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  {progressText || "Processando..."}
+                </>
+              ) : "Começar Teste Grátis"}
             </Button>
             <div className="text-center text-sm">
               Já tem conta? <Link href="/login" className="underline font-bold">Faça login</Link>
