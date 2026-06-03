@@ -25,27 +25,12 @@ export async function getAdminServices() {
     let app = getExistingApp();
 
     if (!app) {
-        // Carrega as credenciais dinamicamente para evitar erro de compilação quando o arquivo JSON não existe (ex: produção)
-        let serviceAccount: ServiceAccount | null = null;
-
-        if (process.env.FIREBASE_PROJECT_ID && process.env.FIREBASE_CLIENT_EMAIL && process.env.FIREBASE_PRIVATE_KEY) {
-            serviceAccount = {
-                projectId: process.env.FIREBASE_PROJECT_ID,
-                clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
-                privateKey: process.env.FIREBASE_PRIVATE_KEY.replace(/\\n/g, '\n'),
-            };
-        } else {
-            try {
-                const fs = require('fs');
-                const path = require('path');
-                const credentialsPath = path.join(process.cwd(), 'minhaheranca.json');
-                if (fs.existsSync(credentialsPath)) {
-                    serviceAccount = JSON.parse(fs.readFileSync(credentialsPath, 'utf8')) as ServiceAccount;
-                }
-            } catch (error) {
-                console.warn('[FIREBASE_ADMIN] Não foi possível carregar as credenciais locais do arquivo minhaheranca.json:', error);
-            }
-        }
+        // Define as credenciais do admin diretamente para garantir que o backend novoheranca consiga conectar no RTDB do projeto
+        let serviceAccount: ServiceAccount = {
+            projectId: "studio-8232085638-4768f",
+            clientEmail: "firebase-adminsdk-fbsvc@studio-8232085638-4768f.iam.gserviceaccount.com",
+            privateKey: "-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQC6wUJh/6hvKfn9\nTo72SeGiEH1wsCa6oo4q1NE6JRasqJW8wduzibPcXXPVYICERO+abXraSO7p+aoo\nf2bubAgc0xS/jBnE5victgJ2T1Q/GOMQp348dnGKb49/EcKFxMVWgIoe8nIUn++g\npqYd+5RSKtalbtdIuAQE4fUshNPw863ZcflLN5DbHJ2uEqhLJVJk4cCUCfMwym2+\neM72DBYI2NlZdJpQRsBfNYTC6k3PUxS7r2+WWQyHMeMWqxFpdHXUQDajluhTPt2g\nE0G0e0JxYuIkVHOwV9XVktcVVN8iK9FUXmdOKrX5Iri2tMo+OPaycMqO9GgH2aZC\nCUzvCNLFAgMBAAECggEAKLV1YLLPtrGmAHE2KRooQMFK8rw3KQJDrrL2y6+nfmn+\nP+fbGgsHhZ7qX8YaJZr4RsecGsaAq8iELrE80PaEGzJo6Ksjt9/oLBLhvQPkV5+3\naVs1YX0pGVXhp/+JUUr4ADfjQ8UyGGxXmgORnOII7hNP+D5N19hi6eSOYs6ue2xn\nIfnhow3AmTfc03R5zm9yezq8O/tEcem3qmJmoC3KlQ30IRyCCFpV1ovDelqOzrXi\nlhhfJu+yM6VngFvMDE6lyjohoCTe02L5J8TrShUL6/wxjGyvz/6uDvubHD3065aL\nc3OPuFMhqGUkugmSnThe+W7SGEBwKZGcewgQXHriYQKBgQDtNPiMcJpH3p2uPTqX\njNn1h/OzDmbYH0HGNJSd/lRhk5pB7v5jEiO1MF4QJPmSt89XWXN/LEuZC6EHfqL8\ndTKbd2YY1QzO8PFLeTxMVagKerUGB9TGzqvhKCx6ssKWGDCNjfxUKx9RuFEZNtfM\n8HhOKWgIPv6i7xRBmKIGfW4voQKBgQDJjQV1a727HnkHp2ek9NaTTh4OehMCGk6k\nRDQ2cNXopxH+jrdDPPcq8HOUB034TlwSuApE//k+bvh/62z6M8aGruit1WBAix+w\nyl3tEafdnXZrWjTUEJKluTzNhoEUSUw9ZmUHShOqnYyZATVmOpCm2rVE+7151TQV\nebH59xAgpQKBgQCfl30GGBhk9E0IVp+eKSDXxgFbXfwpulXpgaTf66ZgBAvMAnza\nsPCfTgxrNkVHxi1U6pT/YhD2xlEwFq6Xxk4nNRzW5jh43ripe8bq4NJvQoGarhgl\nLhWMJhhO8QhkLaA1DOtQwbaPp7/AhBqLAtseU1NwANoXS11IiOWyEh/ZIQKBgQCO\nxjgcsuLnX7HKyzqvbsVl+gtuo+k9LxeQY8Q84HeXZGpp0f1eQxywLT8imH4SLKgq\nlnan5FBSetfL/iDnqK+0jsjDA4k4j5U2blRU8JHien39lBwiMU9A2FSLHwHnNfks\n8ZEVtdLypMKJTILgVRJNMFcCc/YIDRDlOZzq/qpNBQKBgERO8/MrP1fE0W7EOfJo\nmKPwK0DRSxWx4R0L4lI7MMdEwdujKK9k9wnUIRRpYLVGC1AM2cBQlo3qBENsupDR\ndGdXfORWfsAkm7+zvhSD96pqcCnqF1HLCaKGtyRnar1UFt3OTEoczlJPf6TmOkBv\n0oE5u3iHR6nlnZw2kJjmjj+O\n-----END PRIVATE KEY-----\n"
+        };
 
         // Define as URLs do banco de dados e storage para garantir que sejam encontradas no ambiente de produção.
         const databaseURL = "https://studio-8232085638-4768f-default-rtdb.firebaseio.com";
